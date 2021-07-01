@@ -1,7 +1,10 @@
-import React from 'react';
-import {withAppContext} from './AppContext';
+import React from "react";
+import { withAppContext } from "./AppContext";
 
-const WordCount = ({words}) =>
-  <div className="wordcount">{ words || 0 } { words === 1 ? "word" : "words" }</div>
+const WordCount = ({ words, limit }) => (
+  <div className="wordcount">
+    {words || 0} {" / " + limit} {"words"}
+  </div>
+);
 
 export default withAppContext(WordCount);

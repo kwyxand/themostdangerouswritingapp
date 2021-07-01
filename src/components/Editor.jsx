@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import classNames from 'classnames';
-import {AppContext} from './AppContext';
+import React, { Component } from "react";
+import classNames from "classnames";
+import { AppContext } from "./AppContext";
 
 export default class Editor extends Component {
   constructor(props) {
@@ -16,16 +16,33 @@ export default class Editor extends Component {
       cutBottom: false,
       text: "",
       letter: "",
-      timerId: null
-    }
+      timerId: null,
+    };
 
     this.invalid_keys = [
-      'Backspace', 'Tab', 'Enter', 'Control', 'Alt', 'Meta', 'Escape',
-      'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
-      'CapsLock', 'Shift', 'Delete', 'Home', 'End', ' '
+      "Backspace",
+      "Tab",
+      "Enter",
+      "Control",
+      "Alt",
+      "Meta",
+      "Escape",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "CapsLock",
+      "Shift",
+      "Delete",
+      "Home",
+      "End",
+      " ",
     ];
-    this.disabled_keys = ['Tab'];
-    this.control_keys = ['a', 'c', 'v', 'x', 'f'];
+    this.disabled_keys = ["Tab"];
+    this.control_keys = [
+      "r",
+      // "a", "c", "v", "x", "f"
+    ];
   }
 
   onScroll(event) {
@@ -33,16 +50,17 @@ export default class Editor extends Component {
     const height = this.wrapper.current.clientHeight;
     this.setState({
       cutTop: scrollTop > 0,
-      cutBottom: scrollHeight - 10 > height + scrollTop && scrollHeight > height
+      cutBottom:
+        scrollHeight - 10 > height + scrollTop && scrollHeight > height,
     });
   }
 
-  componentDidMount(){
-   this.input.current.focus();
+  componentDidMount() {
+    this.input.current.focus();
   }
 
   onChange(event) {
-    this.setState({text: event.target.value});
+    this.setState({ text: event.target.value });
   }
 
   onStroke(event) {
@@ -53,17 +71,16 @@ export default class Editor extends Component {
     if (this.disabled_keys.includes(key)) {
       event.preventDefault();
       return;
-    };
+    }
     if (this.invalid_keys.includes(key) || event.repeat) return;
     if (!this.props.won && ctrl && this.control_keys.includes(key)) {
       event.preventDefault();
       return;
     }
 
-
-    if (ctrl && alt && key === 'n') {
+    if (ctrl && alt && key === "n") {
       this.props.onNightMode();
-    } else if (ctrl && alt && key === 'f') {
+    } else if (ctrl && alt && key === "f") {
       this.props.onFullScreen();
     } else {
       clearInterval(this.state.timerId);
@@ -77,37 +94,39 @@ export default class Editor extends Component {
 
   clearLetter() {
     clearInterval(this.state.timerId);
-    this.setState({letter: ""})
+    this.setState({ letter: "" });
   }
 
   reset() {
-    this.setState({ cutTop: false, cutBottom: false, text: ""});
+    this.setState({ cutTop: false, cutBottom: false, text: "" });
   }
 
   render() {
     return (
-      <AppContext.Consumer>{ ({danger, hardcore, won}) =>
-        <div
-          className={classNames('editor', {
-            danger,
-            hardcore: hardcore && !won,
-            'cut-top': this.state.cutTop,
-            'cut-bottom': this.state.cutBottom,
-          })}
-         ref={this.wrapper}
-        >
-          {hardcore && <div className="hardcore" >{this.state.letter}</div> }
-          <textarea
-            placeholder="Start typing..."
-            spellCheck="false"
-            onKeyDown={this.onStroke}
-            onChange={this.onChange}
-            onScroll={this.onScroll}
-            ref={this.input}
-            value={this.state.text}
-          ></textarea>
-        </div>
-      }</AppContext.Consumer>
-    )
+      <AppContext.Consumer>
+        {({ danger, hardcore, won }) => (
+          <div
+            className={classNames("editor", {
+              danger,
+              hardcore: hardcore && !won,
+              "cut-top": this.state.cutTop,
+              "cut-bottom": this.state.cutBottom,
+            })}
+            ref={this.wrapper}
+          >
+            {hardcore && <div className="hardcore">{this.state.letter}</div>}
+            <textarea
+              placeholder="Start typing..."
+              spellCheck="false"
+              onKeyDown={this.onStroke}
+              onChange={this.onChange}
+              onScroll={this.onScroll}
+              ref={this.input}
+              value={this.state.text}
+            ></textarea>
+          </div>
+        )}
+      </AppContext.Consumer>
+    );
   }
 }

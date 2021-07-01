@@ -1,25 +1,23 @@
-import React from 'react';
+import React from "react";
 
 export const AppContext = React.createContext({
   won: false,
   lost: false,
   danger: false,
-  limit: 5,
-  progres: 0,
-  type: "minutes",
-  hardcore: false
+  limit: 750,
+  progress: 0,
+  type: "words",
+  hardcore: false,
 });
 
 export function withAppContext(Component, data = {}) {
-   return class extends React.Component {
-      render() {
-         return (
-            <AppContext.Consumer>
-               {context => (
-                  <Component {...context} {...data} />
-               )}
-            </AppContext.Consumer>
-         )
-      }
-   }
+  return class extends React.Component {
+    render() {
+      return (
+        <AppContext.Consumer>
+          {(context) => <Component {...context} {...data} />}
+        </AppContext.Consumer>
+      );
+    }
+  };
 }
